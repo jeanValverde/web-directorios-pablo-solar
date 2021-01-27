@@ -1,0 +1,51 @@
+.icon-radius-60{
+    border-radius: 60%;
+}
+
+
+.bg-palid{
+    background-color: #f2e083 !important;
+}
+
+
+.option-nav:hover{
+    background-color: #f9ba2d;
+    color: #383b3e;
+}
+
+
+
+.option-nav{
+    text-decoration: none;
+    color: #ffff;
+    height: 50px;
+    padding-top: 0.8%;
+}
+
+.option-active{
+    color: #383b3e;
+    text-decoration: none;
+    background-color: #f9ba2d;
+    padding-top: 0.8%;
+}
+
+.option-active:hover{
+    background-color: #f9ba2d;
+    color: #383b3e;
+}
+
+.option-nav > i {
+    color: #f9ba2d;
+}
+
+.option-active > i {
+    color: #383b3e;
+}
+
+.option-nav:hover > i{
+    color: #383b3e;
+}
+
+.bg-principal{
+    background-color: #f9ba2d !important;
+}
