@@ -42,10 +42,8 @@
                     <a href="#" class="col-md-3 col-sm-12 option-nav">
                         <i class="bi bi-person-lines-fill"></i> Usuarios
                     </a>
-                    <a href="#" class="col-md-3 col-sm-12 option-nav" >
-                        <i class="bi bi-search"></i> Buscar
-                    </a>
-                    <a href="#" class="col-md-3 col-sm-12 option-nav" >
+                  
+                    <a href="#" class="col-md-6 col-sm-12 option-nav" >
                         <i class="bi bi-person-fill"></i> Juan Perez
                     </a>
                 </div>
@@ -54,9 +52,9 @@
 
 
         <!--info directorio-->
-        <div class="row bg-secondary pb-2 pt-2 text-light">
-            <div class="col-2 text-center">
-                Nuevo <i class="fas fa-plus-circle"></i>
+        <div class="row bg-secondary pb-3 pt-3 text-light">
+            <div class="col-2  text-center">
+              <button class="btn btn-secundary btn-nueva-sucursal " type="button" ><i class="bi bi-plus-circle-fill"></i> Nuevo </button>
             </div>
             <div class="col-10">Directorio actual: Casa Matriz</div>
         </div>
@@ -67,16 +65,16 @@
     
     
             <!--lista de sucursales-->
-            <div class="col-2 ">
-                <ul class="list-group list-group-flush text-dark">
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        Casa matriz <i class="fas fa-edit"></i>
+            <div class="col-2 lista-sucursal ">
+                <ul class="list-group list-group-flush text-dark" id="lista_sucursal" >
+                    <li class="list-group-item d-flex justify-content-between align-items-center bg-principal">
+                       Casa matriz <button class="btn m-0 p-0" > <i class="bi bi-pencil-fill"></i></button>
                     </li>
-                    <li class="list-group-item  d-flex justify-content-between align-items-center">
-                        Sucursal 1 <i class="fas fa-edit"></i>
+                    <li class="list-group-item   d-flex justify-content-between align-items-center bg-palid">
+                        Sucursal 1 <button class="btn m-0 p-0" > <i class="bi bi-pencil-fill"></i></button>
                     </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        Sucursal 2 <i class="fas fa-edit"></i>
+                    <li class="list-group-item  d-flex justify-content-between align-items-center bg-palid">
+                        Sucursal 2 <button class="btn m-0 p-0" > <i class="bi bi-pencil-fill"></i></button>
                     </li>
                 </ul>
             </div>
@@ -87,10 +85,10 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th scope="col" class="bg-secondary">CUENTA <i class="fas fa-plus-circle"></i></th>
-                            <th scope="col" class="bg-secondary" >SUBCUENTA <i class="fas fa-plus-circle"></i></th>
-                            <th scope="col" class="bg-secondary" >ITEM <i class="fas fa-plus-circle"></i></th>
-                            <th scope="col" >Ordenar</th>
+                            <th scope="col" class="bg-secondary"> <button class="btn" ><i class="bi bi-plus-circle-fill"></i> CUENTA</button>  </th>
+                            <th scope="col" class="bg-secondary" > <button class="btn" ><i class="bi bi-plus-circle-fill"></i> SUBCUENTA </button> </th>
+                            <th scope="col" class="bg-secondary" > <button class="btn" ><i class="bi bi-plus-circle-fill"></i> ITEM</button>  </th>
+                            <th scope="col" > <button><i class="bi bi-list"></i> Ordenar</button></th>
                         </tr>
                     </thead>
                     <tbody>

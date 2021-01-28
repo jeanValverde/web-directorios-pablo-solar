@@ -18,15 +18,15 @@
 .option-nav{
     text-decoration: none;
     color: #ffff;
-    height: 50px;
-    padding-top: 0.8%;
+    height: 30px;
+    padding-top: 0.2%;
 }
 
 .option-active{
     color: #383b3e;
     text-decoration: none;
     background-color: #f9ba2d;
-    padding-top: 0.8%;
+    padding-top: 0.2%;
 }
 
 .option-active:hover{
@@ -49,3 +49,19 @@
 .bg-principal{
     background-color: #f9ba2d !important;
 }
+
+.lista-sucursal{
+    margin: 0px;
+    padding: 0px;
+}
+.btn-nueva-sucursal{
+    color: #ffff;
+}
+
+.btn-nueva-sucursal:hover{
+    color: #f9ba2d;
+    border-color: #f9ba2d;
+    box-shadow: none;
+    
+}
+

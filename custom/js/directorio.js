@@ -1,4 +1,4 @@
-(function(window){
+//(function(window){
     var _self;
     var directorio ={
         vars:{
@@ -10,6 +10,14 @@
             _self                           = this;
             
             //HTML
+
+
+            //lista sucursal 
+            _self.lista_sucursal = $('#lista_sucursal');
+            _self.helper.margin_top_automatico_lista_sucursal();
+
+
+
 
 
             //ejecutar eventos al cargar la pagina 
@@ -84,10 +92,24 @@
                 }
                 return true;
             },
+
+            //metodo para dar un borde automatico definido por requerimiento
+            margin_top_automatico_lista_sucursal: function () {
+                let listaSucusales =  _self.lista_sucursal.find('li');
+                let contador = 0;
+                listaSucusales.each(function() {
+                    if(contador >= 1){
+                        $( this ).addClass("mt-2");
+                    }
+                    contador = contador + 1;
+                });
+            }, 
+
+
         },
     }
     window.directorio = directorio;
-})(window);
+//})(window);
 
 
 $(document).ready(function() {
