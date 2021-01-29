@@ -54,14 +54,25 @@
     margin: 0px;
     padding: 0px;
 }
-.btn-nueva-sucursal{
+.btn-nuevo{
     color: #ffff;
 }
 
-.btn-nueva-sucursal:hover{
+.btn-nuevo:hover{
     color: #f9ba2d;
-    border-color: #f9ba2d;
+    border-color: none;
     box-shadow: none;
     
 }
 
+.text-primary{
+    color: #2d5a9e !important;
+}
+
+.text-success{
+    color: #77c344 !important;
+}
+
+.text-warning{
+    color: #fba221 !important;
+}
