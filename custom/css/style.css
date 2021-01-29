@@ -76,3 +76,12 @@
 .text-warning{
     color: #fba221 !important;
 }
+
+.ordenar{
+    width: 10%;;
+}
+
+.btn-ordenar{
+    padding-right: 0px;
+    padding-left: 0px;
+}
