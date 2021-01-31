@@ -1,11 +1,18 @@
 
-//(function(window){
+//(function(window){ 
 var _self;
 var directorio = {
     vars: {
         ajaxA: '/URL/',
         nombreFormularios: ['form_sucursal', 'form_cuenta', 'form_subcuenta_item', 'form_subcuenta', 'form_item'],
-        datosDirectorio : null
+        sucursales: null,
+        datosDirectorio: null,
+        isInicio: true,
+        ordenar: false,
+        btnCheckOrdenar: '<button class="btn btn-warning btn-ordenar-check" id="btn-ordenar-check" ><i class="bi bi-check2"></i></button>',
+        btnCancelOrdenar: '</button><button class="btn btn-danger" id="btn-ordenar-cancel" ><i class="bi bi-x"></i></button>',
+        btnOrdenar: '<button class="btn btn-nuevo btn-ordenar" id="btn_ordenar" ><i class="bi bi-list"></i> Ordenar </button>',
+        optionSeleccione: '<option value="select">Seleccione</option>', 
     },
     init: function () {
         //inicializar variable de acceso 
@@ -13,9 +20,8 @@ var directorio = {
 
         //HTML
 
-
         //lista sucursal 
-        _self.lista_sucursal    = $('#lista_sucursal');
+        _self.lista_sucursal = $('#lista_sucursal');
         _self.sucursal_template = $("#sucursal_template").html();
 
 
@@ -52,36 +58,36 @@ var directorio = {
         _self.id_cuenta = $("#id_cuenta");
         _self.btn_agregar_cuenta = $("#btn_agregar_cuenta");
         _self.guardar_cuenta = $('#guardar_cuenta');
-      
+
 
         //directorio actual 
         _self.directoio_actual = $("#directoio_actual");
 
         //nombre usuario sesion 
-        _self.nombre_usuario =$("#nombre_usuario");
+        _self.nombre_usuario = $("#nombre_usuario");
 
 
         //modal editar subcuenta e item 
-        _self.modal_edit_subcuenta_item =$("#modal_edit_subcuenta_item");
-        _self.form_subcuenta_item    =$("#form_subcuenta_item");
-        _self.modal_subcuenta_item_titulo =$("#modal_subcuenta_item_titulo");
-        _self.tipo_subcuenta_item =$("#tipo_subcuenta_item");
-        _self.id_subcuenta_item =$("#id_subcuenta_item");
-        _self.nombre_subcuenta_item =$("#nombre_subcuenta_item");
+        _self.modal_edit_subcuenta_item = $("#modal_edit_subcuenta_item");
+        _self.form_subcuenta_item = $("#form_subcuenta_item");
+        _self.modal_subcuenta_item_titulo = $("#modal_subcuenta_item_titulo");
+        _self.tipo_subcuenta_item = $("#tipo_subcuenta_item");
+        _self.id_subcuenta_item = $("#id_subcuenta_item");
+        _self.nombre_subcuenta_item = $("#nombre_subcuenta_item");
         _self.guardar_subcuenta_item = $("#guardar_subcuenta_item");
 
-        
+
         //modal agregar subcuenta 
-        _self.modal_subcuenta =$("#modal_subcuenta");
+        _self.modal_subcuenta = $("#modal_subcuenta");
         _self.form_subcuenta = $("#form_subcuenta");
-        _self.select_subcuenta =$("#select_subcuenta");
+        _self.select_subcuenta = $("#select_subcuenta");
         _self.nombre_subcuenta = $("#nombre_subcuenta");
         _self.guardar_subcuenta = $("#guardar_subcuenta");
         _self.btn_agregar_subcuenta = $("#btn_agregar_subcuenta");
 
-      
+
         //modal agregar item 
-        _self.modal_agregar_item =$("#modal_agregar_item");
+        _self.modal_agregar_item = $("#modal_agregar_item");
         _self.form_item = $('#form_item');
         _self.select_cuenta_item = $("#select_cuenta_item");
         _self.select_subcuenta_item = $("#select_subcuenta_item");
@@ -90,6 +96,8 @@ var directorio = {
         _self.btn_agregar_item = $("#btn_agregar_item");
 
 
+        //btn ordenar
+        _self.btn_ordenar = $("#btn_ordenar");
 
 
         //ejecutar eventos al cargar la pagina 
@@ -106,7 +114,7 @@ var directorio = {
 
         //sucursal editar 
         $(".item-btn-sucursal").click(function (e) {
-            
+
             //Obtengo el id desde nuestro boton.
             var id = $(this).attr('id');
 
@@ -135,7 +143,7 @@ var directorio = {
 
         $(".editar-directorio").change(function (e1) {
 
-            
+
 
             let nombre = $(e1.target).find(":selected").attr("data-nombre");
             let id = $(e1.target).find(":selected").attr("data-id");
@@ -159,35 +167,93 @@ var directorio = {
 
         });
 
-        _self.guardar_subcuenta_item.click((e)=>{
+        _self.guardar_subcuenta_item.click((e) => {
             _self.actions.editarSubcuentaItem();
         });
 
 
-        _self.guardar_subcuenta.click((e)=>{
+        _self.guardar_subcuenta.click((e) => {
             _self.actions.agregarSubCuenta();
         });
 
-        _self.guardar_item.click(()=>{
+        _self.guardar_item.click(() => {
             _self.actions.agregarItem();
         });
 
 
         //cargar select de sub cuenta 
-        _self.select_cuenta_item.change(function (e1){
-             console.log($(e1.target).val());
+        _self.select_cuenta_item.change(function (e1) {
+            console.log($(e1.target).val());
             _self.helper.cargarSelectAgregarItem($(e1.target).val());
         });
 
         //btn agregar subcuenta 
-        _self.btn_agregar_subcuenta.click(()=>{
+        _self.btn_agregar_subcuenta.click(() => {
             _self.helper.modalAgregarSubCuenta();
         });
 
         //btn agregar subcuenta 
-        _self.btn_agregar_item.click(()=>{
+        _self.btn_agregar_item.click(() => {
             _self.helper.modalAgregarItem();
         });
+
+
+        //ir a nuevo direcctorio 
+        $(".link-sucursal").click(function (e1) {
+            let id = $(e1.target).attr("data-id");
+            _self.actions.getDirectorios(id);
+        });
+
+
+
+        _self.btn_ordenar.click(() => {
+
+            if (_self.vars.datosDirectorio != null) {
+                _self.vars.ordenar = true; //habilitar ordenar tabla 
+
+                //cambiar los btn por guardar o cancelar 
+                $(".ordenar").addClass("text-center");
+                $(".ordenar").empty();
+                $(".ordenar").append(_self.vars.btnCheckOrdenar);
+                $(".ordenar").append(_self.vars.btnCancelOrdenar);
+                _self.setEvents();
+            }
+
+        });
+
+        $("#btn-ordenar-cancel").click(() => {
+            $(".ordenar").empty();
+            $(".ordenar").append(_self.vars.btnOrdenar);
+            _self.vars.ordenar = false;
+            _self.init();
+            _self.setEvents();
+        });
+
+        $("#btn-ordenar-check").click(() => {
+
+            let directorioOrdenado = new Array();
+
+            _self.tabla_principal_cuentas.find('tbody tr').find('.ordenar-td').each((index, td) => { 
+                
+
+                let directorio = {
+                    id_cuenta: $(td).attr('data-id-cuenta'), 
+                    id_subcuenta: $(td).attr('data-subcuenta'),
+                    id_item: $(td).attr('data-id-item'),
+                    orden_item_actual:  $(td).attr('data-orden'),
+                    orden_item_cambio: $(td).attr('data-orden-cambio'),
+                }
+
+                directorioOrdenado.push(directorio);
+
+            });
+
+            $('#btn-ordenar-cancel').click();
+
+            _self.actions.guardarOrdenLista(directorioOrdenado);
+
+        });
+
 
 
     },
@@ -209,15 +275,14 @@ var directorio = {
                 },
                 success: function (data) {
                     //respuesta exitosa del servidor 
-
+                    _self.vars.isInicio = false;
 
                     _self.nombre_usuario.val(data.respuesta.nombre);
                     _self.helper.initDirectorioActual(data);
-                    
+
                     //una ves que el directorio y el nombre este cargado se debe cargar las sucursales y tabla de directorios 
                     _self.actions.getSucursales();
                     _self.actions.getDirectorios();
-
                 },
                 error: function () {
                     //respuesta de error del servidor
@@ -249,6 +314,14 @@ var directorio = {
                 success: function (data) {
                     //respuesta exitosa del servidor 
                     _self.helper.initTablaCuentas(data);
+                    //tambien tiene que retornar el directorio actual 
+                    _self.helper.initDirectorioActual(data);
+
+                    //solo si no es la primera carga 
+                    if (!_self.vars.isInicio) {
+                        _self.helper.initListaSucursales();
+                    }
+
                 },
                 error: function () {
                     //respuesta de error del servidor
@@ -278,6 +351,7 @@ var directorio = {
                 success: function (data) {
                     //respuesta exitosa del servidor 
                     _self.helper.initListaSucursales(data);
+                    _self.vars.sucursales = data.respuesta;
                 },
                 error: function () {
                     //respuesta de error del servidor
@@ -288,7 +362,7 @@ var directorio = {
                     _self.modal_cargando.modal('hide');
                 },
             });
-        }, 
+        },
 
         editarAgregarSucursal: function () {
 
@@ -452,7 +526,7 @@ var directorio = {
                     _self.modal_cargando.modal('hide');
                 },
             });
-        }, 
+        },
 
 
         agregarItem: function () {
@@ -495,7 +569,41 @@ var directorio = {
                 },
             });
 
-        }
+        }, 
+
+
+        guardarOrdenLista: function (directorioOrdenado = null) {
+           
+            if(directorioOrdenado == null){
+                return false;
+            }
+
+            $.ajax({
+                cache: false,
+                url: _self.vars.ajax,
+                dataType: 'json',
+                type: 'POST',
+                data: {
+                    'directorio_ordenado': directorioOrdenado,
+                },
+                beforeSend: function () {
+                    //esperando respuesta del servidor 
+                    _self.modal_cargando.modal('show');
+                },
+                success: function (data) {
+                    //respuesta exitosa del servidor 
+
+                },
+                error: function () {
+                    //respuesta de error del servidor
+                    _self.modal_cargando.modal('hide');
+                },
+                complete: function () {
+                    //al completar la solicitud 
+                    _self.modal_cargando.modal('hide');
+                },
+            });
+        }, 
 
 
 
@@ -549,7 +657,7 @@ var directorio = {
 
 
         initTablaCuentas: function (cuentas) {
-            let cuentask = { "respuesta": [["C01210224", "Finanzas", "2", "", "", "", "", "", "", 0], ["C10200220", "Recursos Humanos", "1", "SC10200400", "Casa Matriz", "1.1", "It10200702", "Gerencia", "1.1.1", 11001], ["C10200220", "Recursos Humanos", "1", "SC10200401", "Sede Vi\u00f1a del Mar", "1.2", "It10200703", "Profesores", "1.2.1", 12001], ["C10200220", "Recursos Humanos", "1", "SC10200401", "Sede Vi\u00f1a del Mar", "1.2", "It10200703", "Alumnos", "1.2.1", 12001], ["C10200220", "Recursos Humanos", "1", "SC10200401", "Sede Vi\u00f1a del Mar", "1.2", "It10200703", "Inspectores", "1.2.1", 12001]] };
+            let cuentask = { "respuesta": [["C01210224", "Finanzas", "2", "", "", "", "", "", "", 0], ["C10200220", "Recursos Humanos", "1", "SC10200400", "Casa Matriz", "1.1", "It10200702", "Gerencia", "1.1.1", 11001], ["C10200220", "Recursos Humanos", "1", "SC10200400", "Casa Matriz", "1.1", "434534534", "Auditoria", "1.1.2", 11001], ["C10200220", "Recursos Humanos", "1", "SC10200401", "Sede Vi\u00f1a del Mar", "1.2", "It10200703", "Profesores", "1.2.1", 12001], ["C10200220", "Recursos Humanos", "1", "SC10200401", "Sede Vi\u00f1a del Mar", "1.2", "1234234", "Alumnos", "1.2.3", 12001], ["C10200220", "Recursos Humanos", "1", "SC10200401", "Sede Vi\u00f1a del Mar", "1.2", "203456", "Inspectores", "1.2.2", 12001]] };
 
             _self.tabla_principal_cuentas.find('tbody:last').empty();
 
@@ -584,8 +692,15 @@ var directorio = {
         },
 
 
-        initListaSucursales: function (sucursales) {
-            let sucursaless = { "respuesta": [["Casa Matriz", "MA324342"], ["Valparaiso", "MA3243s42"], ["Casa Blanca", "MA3243423"], ["Forestal", "MA32434f2"]] };
+        initListaSucursales: function (sucursales = null) {
+            if (sucursales == null) {
+                //eliminar
+                sucursales = { "respuesta": [["Casa Matriz", "MA324342"], ["Valparaiso", "MA3243s42"], ["Casa Blanca", "MA3243423"], ["Forestal", "MA32434f2"]] };
+                _self.vars.sucursales = sucursales;
+
+                //cuando se integre sera
+                //sucursales =  _self.vars.sucursales;
+            }
 
             var idDirectorioActual = _self.directoio_actual.attr('idsucursal');
 
@@ -593,7 +708,7 @@ var directorio = {
 
                 let sucursalesF = new Array();
 
-                sucursaless.respuesta.forEach(sucursal => {
+                sucursales.respuesta.forEach(sucursal => {
                     let formato = {
                         id_sucursal: sucursal[1],
                         nombre: sucursal[0]
@@ -733,20 +848,37 @@ var directorio = {
 
         },
 
-
         dragit: function (event) {
             shadow = event.target;
         },
 
         dragover: function (e) {
-            let t_parent = e.target.parentNode;
-            let t_shadow = shadow.parentNode;
 
-            console.log(e);
+            if (_self.vars.ordenar) {
+                let t_parent = e.target.parentNode;
+                let t_shadow = shadow.parentNode;
 
-            t_shadow.insertBefore(e.target, t_shadow.children[2]);
-            t_parent.insertBefore(shadow, t_parent.children[2]);
+                if ($(e.target).attr("data-subcuenta") == $(shadow).attr("data-subcuenta")) {
+                    t_shadow.insertBefore(e.target, t_shadow.children[2]);
+                    t_parent.insertBefore(shadow, t_parent.children[2]);
+
+                    //reorganizar index 
+                    _self.helper.reorganizarItem($(shadow).attr("data-subcuenta"));
+                }
+            }
+
         },
+
+        reorganizarItem: function (id_subCuenta = '') {
+            if(id_subCuenta != ''){
+                let contador = 1;
+                _self.tabla_principal_cuentas.find('.'+id_subCuenta).each(function (index, td) {
+                    $(td).attr('data-orden-cambio', contador);
+                    contador++;
+                });
+            }
+        },
+
 
         //validar formualrios por el nombre del form 
         validarFormularios: function () {
@@ -756,32 +888,31 @@ var directorio = {
             });
         },
 
-        initDirectorioActual:function (directorio) {
-            let directorioss = {"respuesta":["MA3243423", "Casa Blanca"] };
+        initDirectorioActual: function (directorio) {
+            let directorioss = { "respuesta": ["MA3243423", "Casa Blanca"] };
             _self.directoio_actual.attr("idsucursal", directorioss.respuesta[0]);
             _self.directoio_actual.text(directorioss.respuesta[1]);
-        }, 
+        },
 
-        cargarSelectAgregarItem: function (id_cuenta='') {
+        cargarSelectAgregarItem: function (id_cuenta = '') {
 
 
-            if(id_cuenta != ''){
+            if (id_cuenta != '') {
 
                 _self.select_subcuenta_item.empty();
-                let filaInicial = '<option value="select">Seleccione</option>';
-                _self.select_subcuenta_item.append(filaInicial);
+                _self.select_subcuenta_item.append(_self.vars.optionSeleccione);
 
                 _self.vars.datosDirectorio.forEach(directorio => {
-                    if(directorio.id_cuenta == id_cuenta ){
-                        if(directorio.nombre_subcuenta != ''){
-                            let row = '<option value="'+ directorio.id_subcuenta +'">'+ directorio.nombre_subcuenta +'</option>';
+                    if (directorio.id_cuenta == id_cuenta) {
+                        if (directorio.nombre_subcuenta != '') {
+                            let row = '<option value="' + directorio.id_subcuenta + '">' + directorio.nombre_subcuenta + '</option>';
                             _self.select_subcuenta_item.append(row);
                         }
                     }
                 });
             }
-            
-        }, 
+
+        },
 
         modalSucursal: function (acitvar = true, tipo = 'agregar', nombreSucursal = '', idSucursal = '') {
 
@@ -826,92 +957,88 @@ var directorio = {
         },
 
 
-        modalEditarSubcuentaItem: function (tipo="", nombre = '', id = '') {
+        modalEditarSubcuentaItem: function (tipo = "", nombre = '', id = '') {
             //subcuenta - cuenta 
             console.log('modal editar subcuenta item');
 
             var datos = {
-                'tipo' : tipo, 
-                'nombre' : nombre, 
-                'id' : id
+                'tipo': tipo,
+                'nombre': nombre,
+                'id': id
             }
 
             console.log(datos);
-            if(tipo != '' & nombre != '' & id != ''){
+            if (tipo != '' & nombre != '' & id != '') {
 
                 _self.tipo_subcuenta_item.val(tipo);
                 _self.id_subcuenta_item.val(id);
                 _self.nombre_subcuenta_item.val(nombre);
 
-                if(tipo == 'subcuenta'){
+                if (tipo == 'subcuenta') {
                     _self.modal_subcuenta_item_titulo.text("Editar Subcuenta");
-                }else{
+                } else {
                     _self.modal_subcuenta_item_titulo.text("Editar Item");
                 }
 
                 _self.modal_edit_subcuenta_item.modal('show');
-            }else if (tipo == ''){
+            } else if (tipo == '') {
                 _self.modal_edit_subcuenta_item.modal('hide');
-            }else{
+            } else {
                 _self.helper.modalError(true, 'warning', 'Error Editar', 'Debe seleccionar en la fila correspondiente');
             }
-    
-        }, 
+
+        },
 
 
-        modalAgregarSubCuenta: function (activo= true) {
+        modalAgregarSubCuenta: function (activo = true) {
 
-            if(activo){        
+            if (activo) {
 
                 _self.select_subcuenta.empty();
-                let filaInicial = '<option value="select">Seleccione</option>';
-                _self.select_subcuenta.append(filaInicial);
+                _self.select_subcuenta.append(_self.vars.optionSeleccione);
                 //cargar las cuentas en el select 
                 _self.vars.datosDirectorio.forEach(directorio => {
-                    
-                    if(directorio.nombre_cuenta != ''){
-                        let row = '<option value="'+ directorio.id_cuenta +'">'+ directorio.nombre_cuenta +'</option>';
+
+                    if (directorio.nombre_cuenta != '') {
+                        let row = '<option value="' + directorio.id_cuenta + '">' + directorio.nombre_cuenta + '</option>';
                         _self.select_subcuenta.append(row);
                     }
 
                 });
 
                 _self.modal_subcuenta.modal('show');
-            }else{
+            } else {
                 _self.modal_subcuenta.modal('hide');
             }
 
-        }, 
+        },
 
         modalAgregarItem: function (activo = true) {
 
 
-            if(activo){
-
+            if (activo) {
 
                 _self.select_cuenta_item.empty();
-                let filaInicial = '<option value="select">Seleccione</option>';
-                _self.select_cuenta_item.append(filaInicial);
+                _self.select_cuenta_item.append(_self.vars.optionSeleccione);
 
+                //cargar las cuentas en el select 
+                _self.vars.datosDirectorio.forEach(directorio => {
 
-                 //cargar las cuentas en el select 
-                 _self.vars.datosDirectorio.forEach(directorio => {
-                    
-                    if(directorio.nombre_cuenta != ''){
-                        let row = '<option value="'+ directorio.id_cuenta +'">'+ directorio.nombre_cuenta +'</option>';
+                    if (directorio.nombre_cuenta != '') {
+                        let row = '<option value="' + directorio.id_cuenta + '">' + directorio.nombre_cuenta + '</option>';
                         _self.select_cuenta_item.append(row);
                     }
 
                 });
 
                 _self.modal_agregar_item.modal('show');
-            }else{
+            } else {
                 _self.modal_agregar_item.modal('hide');
             }
 
-        }, 
+        },
 
-        
+
 
     },
 }

@@ -94,7 +94,7 @@
                                 </button>
                             </th>
                             <th scope="col" class="bg-secondary ordenar">
-                                <button class="btn btn-nuevo btn-ordenar">
+                                <button class="btn btn-nuevo btn-ordenar" id="btn_ordenar" >
                                     <i class="bi bi-list"></i> Ordenar
                                 </button>
                             </th>
@@ -414,13 +414,21 @@
       <tr>
           <td> <i class="bi bi-folder-fill text-primary"></i>  _CUENTA_</td>
           <td> <i class="bi bi-folder-fill text-success"></i> _SUBCUENTA_</td>
-          <td  class='_IDSUBCUENTA_'   > <i class="bi bi-folder-fill text-warning"></i> _ITEM_</td>
+          <td  class='_IDSUBCUENTA_ ordenar-td'
+           data-id-cuenta="_IDCUENTA_" 
+           data-subcuenta="_IDSUBCUENTA_" 
+           data-id-item="_IDITEM_" 
+           data-orden="_ORDENITEM_"
+           data-orden-cambio=''
+           draggable="true"  
+           ondragstart="_self.helper.dragit(event)"  
+           ondragover="_self.helper.dragover(event)"> <i class="bi bi-folder-fill text-warning"></i> _ITEM_</td>
           <td>
               <select  class="form-select editar-directorio"  aria-label="Default select example">
                   <option selected disabled  >Editar</option>
                   <option value="1" data-id="_IDCUENTA_" data-nombre="_CUENTA_" >Cuenta</option>
                   <option value="2" data-id="_IDSUBCUENTA_" data-nombre="_SUBCUENTA_" >Subcuenta</option>
-                  <option value="3" data-id="_IDITEM_" data-nombre="_ITEM_" >Item</option>
+                  <option value="3" data-id="_IDITEM_" data-nombre="_ITEM_"    >Item</option>
                 </select>
           </td>
       </tr>
@@ -428,7 +436,7 @@
 
     <script type="text/template" id="sucursal_template">
         <li class="list-group-item d-flex justify-content-between align-items-center _ACTIVE_">
-            <a href="#" class="link-sucursal" >_SUCURSAL_</a>
+            <a href="#"  class="link-sucursal" data-id='_IDSUCURSAL_' >_SUCURSAL_</a>
     
             <button class="btn m-0 p-0 " type="button">
                 <i class="bi bi-pencil-fill item-btn-sucursal" id='_IDSUCURSAL_' sucursal="_SUCURSAL_"></i>
