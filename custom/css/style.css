@@ -104,9 +104,41 @@
     font-size: 1000%;
 }
 
+.link-sucursal{
+    text-decoration: none;
+    color: #383b3e;
+}
+
+.link-sucursal:hover{
+    color: #383b3e;
+}
 
 
+.custom-select{
+    display: block;
+    width: 100%;
+    padding: .375rem 1.75rem .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    vertical-align: middle;
+    background-color: #fff;
+    background-repeat: no-repeat;
+    background-position: right .75rem center;
+    background-size: 16px 12px;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
 
+
+.content-cargando{
+    background: transparent;
+    border: 0px;
+}
 
 
 .gu-mirror {

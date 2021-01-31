@@ -42,7 +42,7 @@
                     <a href="#" class="col-md-3 col-sm-12"> </a>
 
                     <a href="#" class="col-md-3 col-sm-12 option-nav">
-                        <i class="bi bi-person-fill"></i> Juan Perez
+                        <i class="bi bi-person-fill"></i><strong id='nombre_usuario'>Nombre Usuario</strong>
                     </a>
                 </div>
             </div>
@@ -51,12 +51,12 @@
         <!--info directorio-->
         <div class="row bg-secondary pb-3 pt-3 text-light">
             <div class="col-2 text-center">
-                <button class="btn btn-secundary btn-nuevo" type="button">
+                <button class="btn btn-secundary btn-nuevo" id="btn_agregar_sucursal" type="button">
                     <i class="bi bi-plus-circle-fill"></i> Nuevo
                 </button>
             </div>
             <div class="col-10">
-                Directorio actual: <strong> Casa Matriz</strong>
+                Directorio actual: <strong id="directoio_actual" idsucursal="MA324342"> Casa Matriz</strong>
             </div>
         </div>
 
@@ -69,24 +69,7 @@
                 </button>
 
                 <ul class="list-group list-group-flush text-dark" id="lista_sucursal">
-                    <li class="list-group-item d-flex justify-content-between align-items-center bg-principal">
-                        Casa matriz
-                        <button class="btn m-0 p-0">
-                            <i class="bi bi-pencil-fill"></i>
-                        </button>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center bg-palid">
-                        Sucursal 1
-                        <button class="btn m-0 p-0">
-                            <i class="bi bi-pencil-fill"></i>
-                        </button>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center bg-palid">
-                        Sucursal 2
-                        <button class="btn m-0 p-0">
-                            <i class="bi bi-pencil-fill"></i>
-                        </button>
-                    </li>
+
                 </ul>
             </div>
 
@@ -96,16 +79,16 @@
                     <thead>
                         <tr>
                             <th scope="col" class="bg-secondary">
-                                <button class="btn btn-nuevo">
+                                <button class="btn btn-nuevo" id='btn_agregar_cuenta'>
                                     <i class="bi bi-plus-circle-fill"></i> CUENTA
                                 </button>
                             </th>
                             <th scope="col" class="bg-secondary">
-                                <button class="btn btn-nuevo">
+                                <button class="btn btn-nuevo" id='btn_agregar_subcuenta' >
                                     <i class="bi bi-plus-circle-fill"></i> SUBCUENTA
                                 </button>
                             </th>
-                            <th scope="col" class="bg-secondary">
+                            <th scope="col" class="bg-secondary" id='btn_agregar_item' >
                                 <button class="btn btn-nuevo">
                                     <i class="bi bi-plus-circle-fill"></i> ITEM
                                 </button>
@@ -127,36 +110,35 @@
     <!--fin container-->
 
     <!--modal cargando-->
-    <div class="modal fade" id="modal_cargando" style="display: none" aria-hidden="false">
+    <div class="modal fade" data-bs-backdrop="static" id="modal_cargando" style="display: none" aria-hidden="false">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
+            <div class="modal-content content-cargando">
                 <div class="modal-body text-center">
                     <div class="spinner-border text-warning spinner-cargando" role="status">
                         <span class="visually-hidden">Loading...</span>
                     </div>
 
-                    <h5 class="modal-title mt-4">Cargando...</h5>
+                    <h5 class="modal-title mt-4 text-light">Cargando...</h5>
                 </div>
             </div>
         </div>
     </div>
 
     <!--modal error-->
-    <div class="modal fade" id="modal_error" tabindex="-1"  style="display: none"
-        aria-hidden="true">
+    <div class="modal fade" id="modal_error" tabindex="-1" style="display: none" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    
+
                     <h5 class="modal-title" id="modal_error_titulo">
                         Titulo de error
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-center">
-                    <i class="bi bi-exclamation-triangle-fill text-danger icon-error" id='modal_error_tipo_peligro'  ></i>
-                    <i class="bi bi-exclamation-circle-fill text-warning icon-error" id='modal_error_tipo_alerta' ></i>
-                    <h5 id='modal_error_body' >
+                    <i class="bi bi-exclamation-triangle-fill text-danger icon-error" id='modal_error_tipo_peligro'></i>
+                    <i class="bi bi-exclamation-circle-fill text-warning icon-error" id='modal_error_tipo_alerta'></i>
+                    <h5 id='modal_error_body'>
                         Mensaje de error
                     </h5>
                 </div>
@@ -170,121 +152,229 @@
     </div>
 
     <!--modal sucursal-->
-    <div class="modal fade" id="modal_sucursal" tabindex="-1" aria-labelledby="exampleModalCenterTitle" style="display: none"
-        aria-hidden="true">
+    <div class="modal fade" id="modal_sucursal" tabindex="-1" aria-labelledby="exampleModalCenterTitle"
+        style="display: none" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modal_sucursal_titulo">
-                        Modal title
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="exampleFormControlInput1" class="form-label">Nombre sucursal</label>
-                        <input type="email" class="form-control" id="nombre_sucursal" placeholder="">
-                      </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        Close
-                    </button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
+                <form action="#" name="form_sucursal" id="form_sucursal">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modal_sucursal_titulo">
+                            Modal title
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+
+                        <input type="hidden" id="tipo_sucursal" value="agregar">
+                        <input type="hidden" id="id_sucursal" value="">
+
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Nombre sucursal</label>
+                            <input type="text" class="form-control" id="nombre_sucursal" placeholder="">
+                            <div class="valid-feedback">
+
+                            </div>
+                            <div class="invalid-feedback">
+                                Obligatorio
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn btn-warning" id="guardar_sucursal">Guardar</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
     <!--modal cuenta-->
-    <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="exampleModalCenterTitle" style="display: none"
-        aria-hidden="true">
+    <div class="modal fade" id="modal_cuenta" tabindex="-1" style="display: none" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalCenterTitle">
-                        Modal title
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>
-                        Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-                        dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta
-                        ac consectetur ac, vestibulum at eros.
-                    </p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        Close
-                    </button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
+
+                <form action="#" name="form_cuenta" id="form_cuenta">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modal_cuenta_titulo">
+                            Modal title
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+
+                        <input type="hidden" id="tipo_cuenta" value="agregar">
+                        <input type="hidden" id="id_cuenta" value="">
+
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Nombre cuenta</label>
+                            <input type="text" class="form-control" id="nombre_cuenta" placeholder="">
+                            <div class="valid-feedback">
+
+                            </div>
+                            <div class="invalid-feedback">
+                                Obligatorio
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn btn-warning" id="guardar_cuenta">Guardar</button>
+                    </div>
+                </form>
+
             </div>
         </div>
     </div>
 
 
-
-    <!--modal subcuenta-->
-    <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="exampleModalCenterTitle" style="display: none"
-        aria-hidden="true">
+    <!--modal editar subcuenta e item-->
+    <div class="modal fade" id="modal_edit_subcuenta_item" tabindex="-1" style="display: none" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalCenterTitle">
-                        Modal title
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>
-                        Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-                        dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta
-                        ac consectetur ac, vestibulum at eros.
-                    </p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        Close
-                    </button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
+                <form action="#" name="form_subcuenta_item" id="form_subcuenta_item">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modal_subcuenta_item_titulo">
+                            Modal title
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+
+                        <input type="hidden" id="tipo_subcuenta_item" value="">
+                        <input type="hidden" id="id_subcuenta_item" value="">
+
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="nombre_subcuenta_item" placeholder="">
+                            <div class="valid-feedback">
+
+                            </div>
+                            <div class="invalid-feedback">
+                                Obligatorio
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn btn-warning" id="guardar_subcuenta_item">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <!--modal agregar subcuenta-->
+    <div class="modal fade" id="modal_subcuenta" tabindex="-1" style="display: none" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form action="#" name="form_subcuenta" id="form_subcuenta">
+                    <div class="modal-header">
+                        <h5 class="modal-title" >
+                            Agregar Subcuenta
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+
+                       
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Cuenta</label>
+                            <select  class="form-select" id='select_subcuenta' >
+                                <option value="select"></option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Obligatorio.
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="nombre_subcuenta" placeholder="">
+                            <div class="valid-feedback">
+
+                            </div>
+                            <div class="invalid-feedback">
+                                Obligatorio
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn btn-warning" id="guardar_subcuenta">Guardar</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
     <!--modal item-->
-    <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="exampleModalCenterTitle" style="display: none"
+    <div class="modal fade" id="modal_agregar_item" tabindex="-1" style="display: none"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalCenterTitle">
-                        Modal title
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>
-                        Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-                        dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta
-                        ac consectetur ac, vestibulum at eros.
-                    </p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        Close
-                    </button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
+                <form action="#" name="form_item" id="form_item">
+                    <div class="modal-header">
+                        <h5 class="modal-title" >
+                            Agregar Item
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+
+                       
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Cuenta</label>
+                            <select  class="form-select" id='select_cuenta_item' >
+                                <option value="select"></option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Obligatorio.
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Sub cuenta</label>
+                            <select  class="form-select" id='select_subcuenta_item' >
+                                <option value="select">Seleccione</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Obligatorio.
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="nombre_item" placeholder="">
+                            
+                            <div class="invalid-feedback">
+                                Obligatorio
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn btn-warning" id="guardar_item">Guardar</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-
-
-
-
 
 
 
@@ -300,6 +390,9 @@
     <!--dragula-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dragula/3.6.1/dragula.min.js"></script>
 
+    <script src="https://validarformularioconbootstrap.jeanvalverde.now.sh/public_html/js/formularios.js"></script>
+
+
     <!--principal-->
     <script type="text/JavaScript" src="custom/js/directorio.js"></script>
 
@@ -312,7 +405,10 @@
 
     -->
 
+
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+
+
 
     <script type="text/template" id="row_template">
       <tr>
@@ -320,15 +416,28 @@
           <td> <i class="bi bi-folder-fill text-success"></i> _SUBCUENTA_</td>
           <td  class='_IDSUBCUENTA_'   > <i class="bi bi-folder-fill text-warning"></i> _ITEM_</td>
           <td>
-              <select  class="form-select" aria-label="Default select example">
+              <select  class="form-select editar-directorio"  aria-label="Default select example">
                   <option selected disabled  >Editar</option>
-                  <option value="1" data-id="_ID_CUENTA_" >Cuenta</option>
-                  <option value="2" data-id="_ID_SUBCUENTA_" >Subcuenta</option>
-                  <option value="3" data-id="_ID_ITEM_"  >Item</option>
+                  <option value="1" data-id="_IDCUENTA_" data-nombre="_CUENTA_" >Cuenta</option>
+                  <option value="2" data-id="_IDSUBCUENTA_" data-nombre="_SUBCUENTA_" >Subcuenta</option>
+                  <option value="3" data-id="_IDITEM_" data-nombre="_ITEM_" >Item</option>
                 </select>
           </td>
       </tr>
     </script>
+
+    <script type="text/template" id="sucursal_template">
+        <li class="list-group-item d-flex justify-content-between align-items-center _ACTIVE_">
+            <a href="#" class="link-sucursal" >_SUCURSAL_</a>
+    
+            <button class="btn m-0 p-0 " type="button">
+                <i class="bi bi-pencil-fill item-btn-sucursal" id='_IDSUCURSAL_' sucursal="_SUCURSAL_"></i>
+            </button>
+    
+        </li>    
+    </script>
+
+
 </body>
 
 </html>
