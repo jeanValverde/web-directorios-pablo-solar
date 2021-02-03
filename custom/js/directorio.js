@@ -49,6 +49,7 @@ var directorio = {
         _self.id_sucursal = $("#id_sucursal");
         _self.btn_agregar_sucursal = $('#btn_agregar_sucursal');
         _self.guardar_sucursal = $('#guardar_sucursal');
+        
 
         //modal cuenta  agregar y editar 
         _self.modal_cuenta = $('#modal_cuenta');
@@ -99,6 +100,10 @@ var directorio = {
         //btn ordenar
         _self.btn_ordenar = $("#btn_ordenar");
 
+        //btn eliminar 
+        _self.btn_eliminar = $('.btn-eliminar-sucursal');
+        
+
 
         //ejecutar eventos al cargar la pagina 
         _self.setEvents();
@@ -142,8 +147,6 @@ var directorio = {
 
 
         $(".editar-directorio").change(function (e1) {
-
-
 
             let nombre = $(e1.target).find(":selected").attr("data-nombre");
             let id = $(e1.target).find(":selected").attr("data-id");
@@ -251,6 +254,21 @@ var directorio = {
             $('#btn-ordenar-cancel').click();
 
             _self.actions.guardarOrdenLista(directorioOrdenado);
+
+        });
+
+
+        //eliminar 
+        $('.btn-eliminar-sucursal').click( function (e1) {
+            let id = $(e1.target).attr("data-id");
+            let tipo = $(e1.target).attr("data-tipo");
+            
+            var eliminarDatos = {
+                'id' : id, 
+                'tipo' : tipo
+            }
+
+            _self.actions.eliminar(eliminarDatos);
 
         });
 
@@ -606,6 +624,58 @@ var directorio = {
         }, 
 
 
+        eliminar: function (datos) {
+            
+            if(datos.id == null){
+                return false;
+            }
+
+            $.ajax({
+                cache: false,
+                url: _self.vars.ajax,
+                dataType: 'json',
+                type: 'POST',
+                data: {
+                    'id': datos.id,
+                    'tipo': datos.tipo
+                },
+                beforeSend: function () {
+                    //esperando respuesta del servidor 
+                    _self.modal_cargando.modal('show');
+
+                    switch (datos.tipo) {
+                        case "sucursal":
+                            _self.helper.modalSucursal(false);
+                            break;
+                        default:
+                            _self.helper.modalCuenta(false);
+                            _self.helper.modalEditarSubcuentaItem(false);
+                            break;
+                    }
+
+                },
+                success: function (data) {
+                    //respuesta exitosa del servidor 
+                    switch (datos.tipo) {
+                        case "sucursal":
+                            _self.actions.getSucursales();
+                            break;
+                        default:
+                            _self.actions.getDirectorios();
+                            break;
+                    }
+                },
+                error: function () {
+                    //respuesta de error del servidor
+                    _self.modal_cargando.modal('hide');
+                },
+                complete: function () {
+                    //al completar la solicitud 
+                    _self.modal_cargando.modal('hide');
+                },
+            });
+        }
+
 
     },
     helper: {
@@ -919,9 +989,12 @@ var directorio = {
             if (acitvar) {
 
                 if (tipo == 'agregar') {
+                    _self.btn_eliminar.hide();
                     _self.modal_sucursal_titulo.text("Agregar Sucursal");
                     _self.tipo_sucursal.val("agregar");
                 } else {
+                    _self.btn_eliminar.show();
+                    _self.btn_eliminar.attr('data-id', idSucursal);
                     _self.modal_sucursal_titulo.text("Editar Sucursal");
                     _self.tipo_sucursal.val("editar");
                 }
@@ -940,9 +1013,12 @@ var directorio = {
             if (acitvar) {
 
                 if (tipo == 'agregar') {
+                    _self.btn_eliminar.hide();
                     _self.modal_cuenta_titulo.text("Agregar Cuenta");
                     _self.tipo_cuenta.val("agregar");
                 } else {
+                    _self.btn_eliminar.show();
+                    _self.btn_eliminar.attr('data-id', idCuenta);
                     _self.modal_cuenta_titulo.text("Editar Cuenta");
                     _self.tipo_cuenta.val("editar");
                 }
@@ -959,7 +1035,6 @@ var directorio = {
 
         modalEditarSubcuentaItem: function (tipo = "", nombre = '', id = '') {
             //subcuenta - cuenta 
-            console.log('modal editar subcuenta item');
 
             var datos = {
                 'tipo': tipo,
@@ -979,6 +1054,9 @@ var directorio = {
                 } else {
                     _self.modal_subcuenta_item_titulo.text("Editar Item");
                 }
+
+                _self.btn_eliminar.show();
+                _self.btn_eliminar.attr('data-id', id);
 
                 _self.modal_edit_subcuenta_item.modal('show');
             } else if (tipo == '') {
